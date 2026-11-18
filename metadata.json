@@ -1,0 +1,6 @@
+{
+  "name": "Logaritmos: comprender, explorar y aplicar",
+  "description": "Aplicación educativa autónoma y adaptativa para estudiantes de 5.º año de secundaria orientada al aprendizaje conceptual, procedimental, algebraico y gráfico de los logaritmos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

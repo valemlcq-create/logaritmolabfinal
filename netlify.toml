@@ -1,0 +1,59 @@
+# Configuración de despliegue en Netlify
+# Netlify lee este archivo automáticamente; no hace falta configurar nada a mano
+# en "Build settings" salvo la variable GEMINI_API_KEY (opcional, ver README).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  # Vite 8 necesita Node 20.19+ o 22.12+
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"
+
+# --- Endpoints de IA (deben ir ANTES de la regla de la SPA) ---
+[[redirects]]
+  from = "/api/tutor"
+  to = "/.netlify/functions/tutor"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/exercises/generate"
+  to = "/.netlify/functions/generate-exercise"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200
+  force = true
+
+# Cualquier otra ruta /api/* inexistente devuelve 404 en vez del index.html
+[[redirects]]
+  from = "/api/*"
+  to = "/404-api"
+  status = 404
+  force = true
+
+# --- SPA: todas las demás rutas cargan la aplicación React ---
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# --- Cabeceras ---
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
